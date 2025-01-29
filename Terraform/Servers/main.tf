@@ -73,14 +73,21 @@ resource "aws_ebs_volume" "assignment1" {
   )
 }
 
-resource "aws_ecr_repository" "my_ecr_repo" {
-  name                 = "assignment1-ecr"
+resource "aws_ecr_repository" "mysql_ecr_repo" {
+  name                 = "assignment1-ecr-mysql"
   image_tag_mutability = "MUTABLE"  
   image_scanning_configuration {
     scan_on_push = true
   }
 }
 
+resource "aws_ecr_repository" "app_ecr_repo" {
+  name                 = "assignment1-ecr-app"
+  image_tag_mutability = "MUTABLE"  
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
 
 # Security Group
 resource "aws_security_group" "web_sg" {
