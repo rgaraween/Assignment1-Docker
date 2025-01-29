@@ -35,7 +35,7 @@ jobs:
       run: |
         ls -ltra
         # Docker build command
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY/my_db:$MYSQL_IMAGE_TAG Dockerfile_mysql
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY/my_db:$MYSQL_IMAGE_TAG -f Dockerfile_mysql .
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY/my_app:$APP_IMAGE_TAG .
         # Unit test
         docker run -d -e MYSQL_ROOT_PASSWORD=pw  $ECR_REGISTRY/$ECR_REPOSITORY/my_db:$MYSQL_IMAGE_TAG 
