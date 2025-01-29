@@ -38,9 +38,11 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY/my_db:$MYSQL_IMAGE_TAG -f Dockerfile_mysql .
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY/my_app:$APP_IMAGE_TAG .
         # Unit test
-        docker run -d -e MYSQL_ROOT_PASSWORD=pw  $ECR_REGISTRY/$ECR_REPOSITORY/my_db:$MYSQL_IMAGE_TAG 
-        docker run -p 8080:8080  -e DBHOST=172.17.0.2 -e DBPORT=3306 -e  DBUSER=root -e DBPWD=pwd  $ECR_REGISTRY/$ECR_REPOSITORY/my_app:$APP_IMAGE_TAG
+        docker run -d -e MYSQL_ROOT_PASSWORD=pw  $ECR_REGISTRY/$ECR_REPOSITORY/my_db:$MYSQL_IMAGE_TAG  my_db
         docker ps
+        export DBHOST=`docker inspect -f ‘{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}’ my_db`
+        echo $DBHOST
+        docker run -p 8080:8080  -e DBHOST=$DBHOST -e DBPORT=3306 -e  DBUSER=root -e DBPWD=pwd  $ECR_REGISTRY/$ECR_REPOSITORY/my_app:$APP_IMAGE_TAG
         echo "Pause for 10 seconds to let container start"
         sleep 10
         curl http://localhost:8080 -vvv
