@@ -38,7 +38,7 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY/my_db:$MYSQL_IMAGE_TAG -f Dockerfile_mysql .
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY/my_app:$APP_IMAGE_TAG .
         # Unit test
-        docker run -d -e MYSQL_ROOT_PASSWORD=pw  $ECR_REGISTRY/$ECR_REPOSITORY/my_db:$MYSQL_IMAGE_TAG  my_db
+        docker run -d -e MYSQL_ROOT_PASSWORD=pw  --name my_db $ECR_REGISTRY/$ECR_REPOSITORY/my_db:$MYSQL_IMAGE_TAG  
         docker ps
         export DBHOST=`docker inspect -f ‘{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}’ my_db`
         echo $DBHOST
